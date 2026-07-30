@@ -1,0 +1,2 @@
+import missingno as msno
+print("导入成功")
