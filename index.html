@@ -1,25 +1,1687 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>课表管理系统-首页</title>
-    <link rel="stylesheet" href="./css/common.css">
-    <link rel="stylesheet" href="./css/design-token.css">
-</head>
-<body>
-    <header class="page-header">
-        <h1>课表管理平台</h1>
-        <nav>
-            <a href="login.html">登录</a>
-            <a href="week-table.html">周课表</a>
-            <a href="day-table.html">每日课表</a>
-        </nav>
-    </header>
-    <main class="content-box">
-        <h2>欢迎使用智能课表管理工具</h2>
-        <p>支持课程新增、编辑、详情查看，按日/周查看课程安排</p>
-    </main>
-    <script src="./js/theme.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>课表管理</title>
+    <style>
+      :root {
+        --primary-color: #4A6CF7;
+        --primary-hover: #5F7FF8;
+        --primary-active: #3A5CD6;
+        --primary-bg: #EEF2FF;
+        --secondary-color: #FF6B6B;
+        --secondary-bg: #FFF0F0;
+        --success: #34C759;
+        --warning: #FF9500;
+        --error: #FF3B30;
+        --info: #5AC8FA;
+
+        --gray-100: #FFFFFF;
+        --gray-200: #F5F7FB;
+        --gray-300: #EEF1F6;
+        --gray-400: #D9DFEB;
+        --gray-500: #A8B2C4;
+        --gray-600: #6B7280;
+        --gray-700: #1F2937;
+
+        --font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        --h1-size: 24px;
+        --h2-size: 20px;
+        --h3-size: 18px;
+        --h4-size: 16px;
+        --text-size: 14px;
+        --sub-size: 12px;
+        --tiny-size: 10px;
+        --line-height-title: 1.35;
+        --line-height-body: 1.5;
+
+        --space-xs: 4px;
+        --space-sm: 8px;
+        --space-md: 16px;
+        --space-lg: 24px;
+        --space-xl: 32px;
+        --space-2xl: 48px;
+
+        --radius-sm: 4px;
+        --radius-md: 8px;
+        --radius-lg: 12px;
+        --radius-xl: 16px;
+        --radius-full: 50%;
+
+        --shadow-0: none;
+        --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.06);
+        --shadow-2: 0 4px 12px rgba(0, 0, 0, 0.08);
+        --shadow-3: 0 8px 24px rgba(0, 0, 0, 0.12);
+        --shadow-4: 0 16px 48px rgba(0, 0, 0, 0.16);
+
+        --touch-target: 44px;
+        --screen-width: 375px;
+        --screen-height: 812px;
+        --bg-color: var(--gray-200);
+        --panel-color: var(--gray-100);
+        --surface-color: var(--gray-200);
+        --text-color: var(--gray-700);
+        --muted-text: var(--gray-600);
+        --border-color: var(--gray-400);
+        --divider-color: var(--gray-300);
+        --card-padding: var(--space-md);
+        --input-height: 46px;
+        --tab-indicator: var(--primary-color);
+        --mask-bg: rgba(17, 24, 39, 0.45);
+      }
+
+      html.dark {
+        --gray-100: #1A1A1A;
+        --gray-200: #242424;
+        --gray-300: #2E2E2E;
+        --gray-400: #4A4A4A;
+        --gray-500: #8A8A8A;
+        --gray-600: #B0B0B0;
+        --gray-700: #E8E8E8;
+        --primary-bg: #1A2340;
+        --bg-color: var(--gray-200);
+        --panel-color: var(--gray-100);
+        --surface-color: var(--gray-200);
+        --text-color: var(--gray-700);
+        --muted-text: var(--gray-600);
+        --border-color: var(--gray-400);
+        --divider-color: var(--gray-300);
+        --shadow-1: 0 1px 3px rgba(255, 255, 255, 0.04);
+        --shadow-2: 0 4px 12px rgba(255, 255, 255, 0.06);
+        --shadow-3: 0 8px 24px rgba(255, 255, 255, 0.08);
+        --shadow-4: 0 16px 48px rgba(255, 255, 255, 0.10);
+        --mask-bg: rgba(0, 0, 0, 0.55);
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        background: var(--gray-300);
+        font-family: var(--font-family);
+        color: var(--text-color);
+      }
+
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--space-xl);
+      }
+
+      button, input, select {
+        font: inherit;
+      }
+
+      .app-shell {
+        width: var(--screen-width);
+        height: var(--screen-height);
+        background: var(--bg-color);
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        position: relative;
+        box-shadow: var(--shadow-4);
+        border: 1px solid rgba(255,255,255,0.14);
+      }
+
+      .page {
+        display: none;
+        width: 100%;
+        height: 100%;
+        background: var(--bg-color);
+        overflow: auto;
+      }
+
+      .page.active {
+        display: block;
+      }
+
+      .page-inner {
+        padding: var(--space-lg) var(--space-md) calc(var(--space-2xl) + 72px);
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: var(--space-lg);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+      }
+
+      .brand-badge {
+        width: 32px;
+        height: 32px;
+        border-radius: var(--radius-md);
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--gray-100);
+        font-size: var(--h4-size);
+        font-weight: 700;
+        box-shadow: var(--shadow-1);
+      }
+
+      .title {
+        margin: 0;
+        font-size: var(--h1-size);
+        line-height: var(--line-height-title);
+        font-weight: 700;
+      }
+
+      .subtitle {
+        margin: var(--space-xs) 0 0;
+        font-size: var(--sub-size);
+        line-height: var(--line-height-body);
+        color: var(--muted-text);
+      }
+
+      .status-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-xs);
+        padding: var(--space-xs) var(--space-sm);
+        border-radius: var(--radius-full);
+        background: var(--primary-bg);
+        color: var(--primary-color);
+        font-size: var(--tiny-size);
+        line-height: 1.4;
+        font-weight: 600;
+      }
+
+      .section {
+        margin-bottom: var(--space-lg);
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: var(--space-md);
+      }
+
+      .section-title {
+        margin: 0;
+        font-size: var(--h2-size);
+        line-height: var(--line-height-title);
+        font-weight: 600;
+      }
+
+      .section-link {
+        border: 0;
+        padding: 0;
+        background: transparent;
+        color: var(--primary-color);
+        font-size: var(--sub-size);
+        line-height: var(--line-height-body);
+        font-weight: 600;
+      }
+
+      .card {
+        background: var(--panel-color);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-1);
+        padding: var(--card-padding);
+      }
+
+      .btn {
+        min-height: var(--touch-target);
+        border: 0;
+        border-radius: var(--radius-md);
+        padding: 0 var(--space-lg);
+        background: var(--primary-color);
+        color: var(--gray-100);
+        font-size: var(--text-size);
+        line-height: var(--line-height-body);
+        font-weight: 600;
+        transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        background: var(--primary-hover);
+      }
+
+      .btn:active {
+        background: var(--primary-active);
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .btn-outline {
+        background: var(--primary-bg);
+        color: var(--primary-color);
+      }
+
+      .btn-danger {
+        background: var(--secondary-color);
+      }
+
+      .btn-light {
+        background: var(--gray-100);
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+      }
+
+      .input-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+        margin-bottom: var(--space-md);
+      }
+
+      .label {
+        font-size: var(--sub-size);
+        color: var(--muted-text);
+        font-weight: 600;
+      }
+
+      .input,
+      .select,
+      .textarea {
+        width: 100%;
+        min-height: var(--input-height);
+        border: 1px solid var(--border-color);
+        background: var(--panel-color);
+        border-radius: var(--radius-md);
+        padding: 0 var(--space-md);
+        color: var(--text-color);
+        font-size: var(--text-size);
+        line-height: var(--line-height-body);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .textarea {
+        min-height: 90px;
+        padding: var(--space-md);
+        resize: vertical;
+      }
+
+      .input:focus,
+      .select:focus,
+      .textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.12);
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 24px;
+        padding: var(--space-xs) var(--space-sm);
+        border-radius: var(--radius-sm);
+        background: var(--primary-bg);
+        color: var(--primary-color);
+        font-size: var(--tiny-size);
+        font-weight: 600;
+        line-height: 1.4;
+      }
+
+      .tag.warning {
+        background: rgba(255, 149, 0, 0.12);
+        color: var(--warning);
+      }
+
+      .tag.success {
+        background: rgba(52, 199, 89, 0.12);
+        color: var(--success);
+      }
+
+      .tag.secondary {
+        background: var(--secondary-bg);
+        color: var(--secondary-color);
+      }
+
+      .list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+      }
+
+      .list-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-md);
+        width: 100%;
+        min-height: var(--touch-target);
+        padding: var(--space-md) 0;
+        border-bottom: 1px solid var(--divider-color);
+        background: transparent;
+        color: var(--text-color);
+      }
+
+      .list-item:last-child {
+        border-bottom: 0;
+      }
+
+      .list-main {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        min-width: 0;
+        flex: 1;
+      }
+
+      .list-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--primary-bg);
+        color: var(--primary-color);
+        font-size: var(--sub-size);
+        font-weight: 600;
+      }
+
+      .list-copy {
+        min-width: 0;
+      }
+
+      .list-copy strong,
+      .list-copy span {
+        display: block;
+      }
+
+      .list-copy strong {
+        font-size: var(--text-size);
+        line-height: 1.4;
+        font-weight: 600;
+      }
+
+      .list-copy span {
+        margin-top: var(--space-xs);
+        font-size: var(--sub-size);
+        color: var(--muted-text);
+        line-height: 1.4;
+      }
+
+      .list-arrow {
+        color: var(--muted-text);
+        font-size: var(--h4-size);
+      }
+
+      .schedule-card {
+        margin-top: var(--space-md);
+      }
+
+      .course-row {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-md);
+      }
+
+      .course-pill {
+        width: 12px;
+        height: 12px;
+        border-radius: var(--radius-full);
+        background: var(--primary-color);
+      }
+
+      .course-name {
+        flex: 1;
+        font-size: var(--text-size);
+        font-weight: 600;
+      }
+
+      .course-time,
+      .course-room {
+        font-size: var(--sub-size);
+        color: var(--muted-text);
+      }
+
+      .course-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-md);
+        padding: var(--space-md);
+        border-radius: var(--radius-lg);
+        background: var(--gray-100);
+        box-shadow: var(--shadow-1);
+      }
+
+      .course-item + .course-item {
+        margin-top: var(--space-sm);
+      }
+
+      .course-item .meta {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+      }
+
+      .course-item .meta strong {
+        font-size: var(--h4-size);
+        line-height: 1.4;
+      }
+
+      .course-item .meta span {
+        color: var(--muted-text);
+        font-size: var(--sub-size);
+        line-height: 1.5;
+      }
+
+      .course-badge {
+        min-width: 74px;
+        padding: var(--space-xs) var(--space-sm);
+        border-radius: var(--radius-md);
+        text-align: center;
+        color: var(--gray-100);
+        font-size: var(--tiny-size);
+        font-weight: 700;
+      }
+
+      .next-class {
+        background: linear-gradient(135deg, var(--primary-bg), rgba(74, 108, 247, 0.04));
+      }
+
+      .next-class .headline {
+        font-size: var(--h4-size);
+        font-weight: 700;
+      }
+
+      .next-class .details {
+        margin-top: var(--space-xs);
+        font-size: var(--sub-size);
+        color: var(--muted-text);
+      }
+
+      .day-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 52px;
+        min-height: 28px;
+        border-radius: var(--radius-full);
+        background: var(--primary-bg);
+        color: var(--primary-color);
+        font-size: var(--sub-size);
+        font-weight: 600;
+      }
+
+      .week-layout {
+        background: var(--panel-color);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-1);
+        overflow: hidden;
+      }
+
+      .week-header {
+        display: grid;
+        grid-template-columns: 56px repeat(7, minmax(0,1fr));
+        border-bottom: 1px solid var(--divider-color);
+        background: var(--gray-100);
+      }
+
+      .week-header-cell,
+      .week-time-cell,
+      .week-day-cell {
+        padding: var(--space-sm) var(--space-xs);
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        border-right: 1px solid var(--divider-color);
+      }
+
+      .week-header-cell {
+        font-size: var(--sub-size);
+        color: var(--muted-text);
+        font-weight: 600;
+      }
+
+      .week-header-cell:last-child,
+      .week-day-cell:last-child {
+        border-right: 0;
+      }
+
+      .week-body {
+        display: grid;
+        grid-template-columns: 56px repeat(7, minmax(0,1fr));
+      }
+
+      .week-time-col {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .week-time-cell {
+        min-height: 80px;
+        font-size: var(--tiny-size);
+        color: var(--muted-text);
+        border-right: 1px solid var(--divider-color);
+        border-bottom: 1px solid var(--divider-color);
+      }
+
+      .week-day-col {
+        position: relative;
+        min-height: 720px;
+        border-right: 1px solid var(--divider-color);
+        background: var(--gray-100);
+        background-image: repeating-linear-gradient(
+          to bottom,
+          transparent 0,
+          transparent 79px,
+          var(--divider-color) 79px,
+          var(--divider-color) 80px
+        );
+      }
+
+      .week-day-cell {
+        min-height: 80px;
+        border-bottom: 1px solid var(--divider-color);
+        position: relative;
+        display: block;
+        padding: var(--space-xs);
+      }
+
+      .week-course {
+        position: absolute;
+        left: 6px;
+        right: 6px;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        border: 0;
+        border-radius: var(--radius-sm);
+        padding: 6px 6px;
+        color: var(--gray-100);
+        box-shadow: var(--shadow-1);
+        font-size: 11px;
+        line-height: 1.3;
+        cursor: pointer;
+        text-align: left;
+      }
+
+      .week-course strong {
+        display: block;
+        white-space: normal;
+        word-break: break-word;
+        font-size: 12px;
+        line-height: 1.25;
+        font-weight: 600;
+      }
+
+      .week-course span {
+        display: block;
+        white-space: normal;
+        word-break: break-word;
+        font-size: 10px;
+        line-height: 1.2;
+      }
+
+      .week-course .course-time {
+        display: block;
+        line-height: 1.25;
+        white-space: normal;
+      }
+
+      .week-day-col:last-child {
+        border-right: 0;
+      }
+
+      .timeline {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+      }
+
+      .time-row {
+        display: grid;
+        grid-template-columns: 70px 1fr;
+        align-items: center;
+        gap: var(--space-sm);
+      }
+
+      .time-label {
+        font-size: var(--sub-size);
+        color: var(--muted-text);
+      }
+
+      .time-line {
+        position: relative;
+        min-height: 52px;
+        padding: var(--space-sm) 0;
+        border-left: 1px solid var(--divider-color);
+        padding-left: var(--space-md);
+      }
+
+      .time-line::before {
+        content: "";
+        position: absolute;
+        left: -4px;
+        top: 50%;
+        width: 8px;
+        height: 8px;
+        border-radius: var(--radius-full);
+        background: var(--primary-color);
+        transform: translateY(-50%);
+      }
+
+      .time-line .course-item {
+        margin: 0;
+        padding: var(--space-sm) var(--space-md);
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-md);
+      }
+
+      .color-picker {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        flex-wrap: wrap;
+      }
+
+      .color-option {
+        width: 24px;
+        height: 24px;
+        border-radius: var(--radius-full);
+        border: 2px solid transparent;
+        cursor: pointer;
+        background: var(--color, var(--primary-color));
+      }
+
+      .color-option.active {
+        border-color: var(--text-color);
+        box-shadow: 0 0 0 2px rgba(255,255,255,0.4);
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: var(--mask-bg);
+        z-index: 50;
+      }
+
+      .modal.show {
+        display: flex;
+      }
+
+      .modal-card {
+        width: min(320px, calc(100% - 32px));
+        background: var(--panel-color);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-3);
+        padding: var(--space-lg);
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: var(--space-md);
+      }
+
+      .modal-title {
+        margin: 0;
+        font-size: var(--h3-size);
+        font-weight: 600;
+      }
+
+      .modal-body {
+        color: var(--muted-text);
+        font-size: var(--text-size);
+        line-height: var(--line-height-body);
+        margin-bottom: var(--space-lg);
+      }
+
+      .course-detail {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+      }
+
+      .detail-row {
+        display: flex;
+        gap: var(--space-xs);
+        align-items: flex-start;
+        color: var(--text-color);
+      }
+
+      .detail-row strong {
+        min-width: 56px;
+        color: var(--muted-text);
+        font-weight: 600;
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--space-sm);
+      }
+
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: var(--space-2xl) var(--space-md);
+        min-height: 260px;
+      }
+
+      .empty-state-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: var(--radius-xl);
+        background: var(--primary-bg);
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        margin-bottom: var(--space-lg);
+      }
+
+      .empty-state h3 {
+        margin: 0 0 var(--space-sm);
+        font-size: var(--h3-size);
+      }
+
+      .empty-state p {
+        margin: 0;
+        color: var(--muted-text);
+        font-size: var(--text-size);
+        line-height: var(--line-height-body);
+      }
+
+      .profile-header {
+        display: flex;
+        align-items: center;
+        gap: var(--space-md);
+        padding: var(--space-lg) 0;
+      }
+
+      .avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: var(--radius-full);
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--gray-100);
+        font-size: var(--h2-size);
+        font-weight: 700;
+      }
+
+      .profile-meta h3 {
+        margin: 0 0 var(--space-xs);
+        font-size: var(--h3-size);
+      }
+
+      .profile-meta p {
+        margin: 0;
+        font-size: var(--sub-size);
+        color: var(--muted-text);
+      }
+
+      .settings-block {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+      }
+
+      .setting-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--space-md) 0;
+        border-bottom: 1px solid var(--divider-color);
+      }
+
+      .switch {
+        position: relative;
+        width: 46px;
+        height: 28px;
+        border-radius: var(--radius-full);
+        background: var(--gray-400);
+        transition: background 0.2s ease;
+      }
+
+      .switch input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .switch-track {
+        position: absolute;
+        inset: 4px auto 4px 4px;
+        width: 18px;
+        border-radius: var(--radius-full);
+        background: var(--gray-100);
+        transition: transform 0.2s ease;
+      }
+
+      .switch input:checked + .switch-track {
+        transform: translateX(18px);
+      }
+
+      .switch input:checked ~ .switch {
+        background: var(--primary-color);
+      }
+
+      .theme-toggle {
+        position: relative;
+        display: inline-block;
+      }
+
+      .theme-toggle input:checked + .switch {
+        background: var(--primary-color);
+      }
+
+      .theme-toggle input:checked + .switch .switch-track {
+        transform: translateX(18px);
+      }
+
+      .bottom-nav {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-xs);
+        height: 70px;
+        padding: var(--space-sm) var(--space-md) calc(var(--space-md) + env(safe-area-inset-bottom));
+        background: rgba(255,255,255,0.82);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid var(--divider-color);
+      }
+
+      html.dark .bottom-nav {
+        background: rgba(26, 26, 26, 0.82);
+      }
+
+      .tab-item {
+        flex: 1;
+        min-height: var(--touch-target);
+        border: 0;
+        background: transparent;
+        color: var(--muted-text);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-xs);
+        font-size: var(--tiny-size);
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .tab-item .icon {
+        font-size: 18px;
+        line-height: 1;
+      }
+
+      .tab-item.active {
+        color: var(--primary-color);
+      }
+
+      .tab-item.active .icon-wrap {
+        background: var(--primary-bg);
+        border-radius: var(--radius-md);
+        padding: var(--space-xs);
+      }
+
+      .login-page {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(180deg, var(--primary-bg), var(--bg-color));
+      }
+
+      .login-box {
+        width: 100%;
+        padding: var(--space-2xl) var(--space-lg) var(--space-xl);
+      }
+
+      .login-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: var(--space-lg);
+      }
+
+      .login-logo .brand-badge {
+        width: 52px;
+        height: 52px;
+        font-size: var(--h2-size);
+      }
+
+      .login-title {
+        text-align: center;
+        margin: 0 0 var(--space-xl);
+        font-size: var(--h1-size);
+        font-weight: 700;
+      }
+
+      .login-form {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+      }
+
+      .login-footer {
+        margin-top: var(--space-xl);
+        text-align: center;
+        font-size: var(--sub-size);
+        color: var(--muted-text);
+      }
+
+      .d-none { display: none !important; }
+
+      @media (max-width: 380px) {
+        body {
+          padding: 0;
+        }
+
+        .app-shell {
+          width: 100vw;
+          height: 100vh;
+          border-radius: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <section id="home-page" class="page active">
+        <div class="page-inner">
+          <div class="topbar">
+            <div>
+              <h1 class="title">今日课表</h1>
+              <p class="subtitle" id="todayLabel">2026-07-31 · 周五</p>
+            </div>
+            <span class="status-chip">已同步</span>
+          </div>
+
+          <div class="section">
+            <div class="section-header">
+              <h2 class="section-title">本日课程</h2>
+              <button class="section-link" type="button" data-open-page="day-page">查看详情</button>
+            </div>
+            <div id="todayCourses" class="list"></div>
+          </div>
+
+          <div class="section">
+            <div class="section-header">
+              <h2 class="section-title">下一节课</h2>
+            </div>
+            <div id="nextCourseCard" class="card next-class"></div>
+          </div>
+
+          <div class="section">
+            <div class="section-header">
+              <h2 class="section-title">提醒</h2>
+            </div>
+            <div class="card">
+              <div class="course-row">
+                <span class="course-pill" style="background: var(--warning);"></span>
+                <span class="course-name">软件工程结项汇报</span>
+                <span class="course-time">08:00</span>
+              </div>
+              <div class="course-row">
+                <span class="course-pill" style="background: var(--success);"></span>
+                <span class="course-name">高级数据结构作业</span>
+                <span class="course-time">明日</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="week-page" class="page">
+        <div class="page-inner">
+          <div class="topbar">
+            <div>
+              <h1 class="title">周课表</h1>
+              <p class="subtitle">第 18 周</p>
+            </div>
+            <span class="day-chip">周五</span>
+          </div>
+          <div class="week-layout" id="weekGrid"></div>
+        </div>
+      </section>
+
+      <section id="day-page" class="page">
+        <div class="page-inner">
+          <div class="topbar">
+            <div>
+              <h1 class="title">日课表</h1>
+              <p class="subtitle">周五 · 08:00 - 20:00</p>
+            </div>
+            <button id="addCourseBtn" class="btn btn-outline" type="button">+ 添加</button>
+          </div>
+          <div id="dayTimeline" class="timeline"></div>
+        </div>
+      </section>
+
+      <section id="detail-page" class="page">
+        <div class="page-inner">
+          <div class="topbar">
+            <div>
+              <h1 class="title">课程详情</h1>
+              <p class="subtitle">课程信息</p>
+            </div>
+            <button class="btn btn-light" type="button" data-open-page="day-page">返回</button>
+          </div>
+          <div id="detailCard" class="card"></div>
+        </div>
+      </section>
+
+      <section id="editor-page" class="page">
+        <div class="page-inner">
+          <div class="topbar">
+            <div>
+              <h1 class="title">添加/编辑课程</h1>
+              <p class="subtitle">填写课程信息</p>
+            </div>
+            <button class="btn btn-light" type="button" data-open-page="day-page">取消</button>
+          </div>
+          <div class="card">
+            <div class="input-wrap">
+              <label class="label" for="courseName">课程名称</label>
+              <input id="courseName" class="input" type="text" value="前端工程实践" />
+            </div>
+            <div class="form-grid">
+              <div class="input-wrap">
+                <label class="label" for="teacherName">教师</label>
+                <input id="teacherName" class="input" type="text" value="李老师" />
+              </div>
+              <div class="input-wrap">
+                <label class="label" for="classroom">教室</label>
+                <input id="classroom" class="input" type="text" value="B-308" />
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="input-wrap">
+                <label class="label" for="courseDate">日期</label>
+                <input id="courseDate" class="input" type="date" value="2026-07-31" />
+              </div>
+              <div class="input-wrap">
+                <label class="label" for="courseWeek">周次</label>
+                <select id="courseWeek" class="select">
+                  <option>第 18 周</option>
+                  <option>第 19 周</option>
+                  <option>第 20 周</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="input-wrap">
+                <label class="label" for="startTime">开始时间</label>
+                <input id="startTime" class="input" type="time" value="08:30" />
+              </div>
+              <div class="input-wrap">
+                <label class="label" for="endTime">结束时间</label>
+                <input id="endTime" class="input" type="time" value="10:00" />
+              </div>
+            </div>
+            <div class="input-wrap">
+              <label class="label">课程颜色</label>
+              <div class="color-picker" id="colorPicker"></div>
+            </div>
+            <div class="input-wrap">
+              <label class="label" for="courseRemark">备注</label>
+              <textarea id="courseRemark" class="textarea">请提前 10 分钟到达，多媒体设备已准备好。</textarea>
+            </div>
+            <button id="saveCourseBtn" class="btn" type="button">保存课表</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="reminder-page" class="page">
+        <div class="page-inner">
+          <div class="topbar">
+            <div>
+              <h1 class="title">提醒中心</h1>
+              <p class="subtitle">待办提醒</p>
+            </div>
+            <span class="status-chip">3 条</span>
+          </div>
+
+          <div class="section">
+            <h2 class="section-title">考试倒计时</h2>
+            <div class="card">
+              <div class="course-item">
+                <div class="meta">
+                  <strong>软件工程期末考试</strong>
+                  <span>距离考试还剩 5 天 8 小时</span>
+                </div>
+                <span class="course-badge" style="background: var(--primary-color);">5d</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-header">
+              <h2 class="section-title">DDL 列表</h2>
+            </div>
+            <div id="ddlList" class="list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="profile-page" class="page">
+        <div class="page-inner">
+          <div class="topbar">
+            <div>
+              <h1 class="title">个人中心</h1>
+              <p class="subtitle">账户设置</p>
+            </div>
+          </div>
+
+          <div class="profile-header card">
+            <div class="avatar">李</div>
+            <div class="profile-meta">
+              <h3>李华</h3>
+              <p>学号：20240001</p>
+            </div>
+          </div>
+
+          <div class="section settings-block">
+            <div class="card">
+              <div class="setting-row">
+                <span>深色模式</span>
+                <label class="theme-toggle" aria-label="切换深色模式">
+                  <input id="themeToggle" type="checkbox" />
+                  <span class="switch">
+                    <span class="switch-track"></span>
+                  </span>
+                </label>
+              </div>
+              <div class="setting-row">
+                <span>关于</span>
+                <span class="list-arrow">›</span>
+              </div>
+              <div class="setting-row">
+                <span>帮助与反馈</span>
+                <span class="list-arrow">›</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <nav class="bottom-nav" aria-label="底部导航">
+        <button class="tab-item active" type="button" data-target="home-page">
+          <span class="icon-wrap"><span class="icon">⌂</span></span>
+          <span>首页</span>
+        </button>
+        <button class="tab-item" type="button" data-target="week-page">
+          <span class="icon-wrap"><span class="icon">◫</span></span>
+          <span>周课表</span>
+        </button>
+        <button class="tab-item" type="button" data-target="day-page">
+          <span class="icon-wrap"><span class="icon">☷</span></span>
+          <span>日课表</span>
+        </button>
+        <button class="tab-item" type="button" data-target="reminder-page">
+          <span class="icon-wrap"><span class="icon">◔</span></span>
+          <span>提醒</span>
+        </button>
+        <button class="tab-item" type="button" data-target="profile-page">
+          <span class="icon-wrap"><span class="icon">◍</span></span>
+          <span>我的</span>
+        </button>
+      </nav>
+    </div>
+
+    <div id="confirmModal" class="modal" aria-modal="true" role="dialog">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 class="modal-title">提示</h3>
+        </div>
+        <div class="modal-body">课程已保存，并已更新到日课表中。</div>
+        <div class="modal-actions">
+          <button class="btn btn-light" type="button" data-close-modal="true">关闭</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const colorPalette = [
+        '#4A6CF7', '#FF6B6B', '#34C759', '#FF9500', '#5AC8FA', '#8A6FF0'
+      ];
+
+      const allCourses = [
+        { id: 1, name: 'Web前端设计', teacher: '陈老师', room: 'A-204', date: '2026-07-31', day: '周五', start: '08:30', end: '10:00', color: '#4A6CF7', type: '必修', note: '需要带电脑。' },
+        { id: 2, name: '大学英语', teacher: '王老师', room: 'C-112', date: '2026-07-31', day: '周五', start: '10:15', end: '11:45', color: '#5AC8FA', type: '公共课', note: '线上口语环节。' },
+        { id: 3, name: '计算机网络', teacher: '赵老师', room: 'B-308', date: '2026-07-31', day: '周五', start: '13:30', end: '15:00', color: '#FF6B6B', type: '专业课', note: '实验报告必交。' },
+        { id: 4, name: '数据结构', teacher: '林老师', room: 'D-105', date: '2026-07-31', day: '周五', start: '15:15', end: '16:45', color: '#34C759', type: '核心课', note: '期中复习。' },
+        { id: 5, name: '高等数学', teacher: '刘老师', room: 'A-101', date: '2026-08-03', day: '周一', start: '08:00', end: '09:30', color: '#FF9500', type: '必修', note: '课堂测验。' },
+        { id: 6, name: '软件工程', teacher: '肖老师', room: 'B-205', date: '2026-08-04', day: '周二', start: '09:40', end: '11:10', color: '#8A6FF0', type: '专业课', note: '项目评审。' },
+        { id: 7, name: '交互设计', teacher: '郑老师', room: 'C-208', date: '2026-08-05', day: '周三', start: '13:00', end: '14:30', color: '#FF6B6B', type: '选修', note: '小组作业。' },
+        { id: 8, name: '数据库原理', teacher: '周老师', room: 'A-312', date: '2026-08-06', day: '周四', start: '15:00', end: '16:30', color: '#5AC8FA', type: '专业课', note: '考核安排。' }
+      ];
+
+      const ddlTasks = [
+        { title: '视觉设计作业', time: '今天 21:00', level: 'warning', tag: '即将截止' },
+        { title: '算法作业提交', time: '明天 18:00', level: 'secondary', tag: '待提交' },
+        { title: '实验报告', time: '周日 12:00', level: 'success', tag: '已安排' }
+      ];
+
+      let selectedCourseId = 1;
+
+      function toMinutes(timeStr) {
+        const [hour, minute] = timeStr.split(':').map(Number);
+        return hour * 60 + minute;
+      }
+
+      function sortByTime(list) {
+        return [...list].sort((a, b) => toMinutes(a.start) - toMinutes(b.start));
+      }
+
+      function showPage(pageId) {
+        document.querySelectorAll('.page').forEach((page) => {
+          page.classList.toggle('active', page.id === pageId);
+        });
+
+        const navMap = {
+          'home-page': 0,
+          'week-page': 1,
+          'day-page': 2,
+          'reminder-page': 3,
+          'profile-page': 4
+        };
+
+        const items = document.querySelectorAll('.tab-item');
+        items.forEach((item, index) => {
+          const active = navMap[pageId] === index;
+          item.classList.toggle('active', active);
+        });
+
+        if (pageId === 'login-page') {
+          document.querySelector('.bottom-nav').style.display = 'none';
+        } else {
+          document.querySelector('.bottom-nav').style.display = 'flex';
+        }
+      }
+
+      function updateThemeToggle() {
+        const dark = document.documentElement.classList.contains('dark');
+        const toggle = document.getElementById('themeToggle');
+        toggle.checked = dark;
+      }
+
+      function renderTodayCourses() {
+        const today = allCourses.filter(course => course.date === '2026-07-31');
+        const list = document.getElementById('todayCourses');
+        list.innerHTML = '';
+
+        if (!today.length) {
+          list.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">☰</div>
+              <h3>今天没有课程</h3>
+              <p>可以安排学习或休息时间。</p>
+            </div>
+          `;
+          return;
+        }
+
+        sortByTime(today).forEach((course) => {
+          const row = document.createElement('button');
+          row.type = 'button';
+          row.className = 'list-item';
+          row.style.borderBottom = '1px solid var(--divider-color)';
+          row.innerHTML = `
+            <div class="list-main">
+              <span class="list-icon" style="background: ${course.color}22; color: ${course.color};">${course.name.slice(0, 1)}</span>
+              <div class="list-copy">
+                <strong>${course.name}</strong>
+                <span>${course.start} - ${course.end} · ${course.room}</span>
+              </div>
+            </div>
+            <span class="list-arrow">›</span>
+          `;
+          row.addEventListener('click', () => {
+            selectedCourseId = course.id;
+            renderDetail();
+            showPage('detail-page');
+          });
+          list.appendChild(row);
+        });
+      }
+
+      function renderNextCourse() {
+        const today = sortByTime(allCourses.filter(course => course.date === '2026-07-31'));
+        const next = today[0];
+        const card = document.getElementById('nextCourseCard');
+
+        if (!next) {
+          card.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">✦</div>
+              <h3>暂无课程</h3>
+              <p>今天的安排还没开始。</p>
+            </div>
+          `;
+          return;
+        }
+
+        card.innerHTML = `
+          <div class="headline">${next.name}</div>
+          <div class="details">${next.start} - ${next.end} · ${next.room} · ${next.teacher}</div>
+          <div class="tag" style="margin-top: var(--space-sm);">${next.type}</div>
+        `;
+      }
+
+      function openCourseDetail(courseId) {
+        const course = allCourses.find(item => item.id === courseId);
+        if (!course) return;
+
+        const modal = document.getElementById('confirmModal');
+        const title = modal.querySelector('.modal-title');
+        const body = modal.querySelector('.modal-body');
+        const closeButton = modal.querySelector('[data-close-modal="true"]');
+
+        title.textContent = '课程详情';
+        body.innerHTML = `
+          <div class="course-detail">
+            <div class="detail-row"><strong>课程</strong><span>${course.name}</span></div>
+            <div class="detail-row"><strong>时间</strong><span>${course.day} ${course.start}-${course.end}</span></div>
+            <div class="detail-row"><strong>地点</strong><span>${course.room}</span></div>
+            <div class="detail-row"><strong>教师</strong><span>${course.teacher}</span></div>
+          </div>
+        `;
+        modal.dataset.returnPage = 'week-page';
+        modal.classList.add('show');
+        closeButton.textContent = '关闭';
+      }
+
+      function renderWeekGrid() {
+        const weekGrid = document.getElementById('weekGrid');
+        const timeSlots = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
+        const days = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+
+        let html = '<div class="week-header"><div class="week-header-cell">节次</div>';
+        days.forEach(day => {
+          html += `<div class="week-header-cell">${day}</div>`;
+        });
+        html += '</div><div class="week-body"><div class="week-time-col">';
+
+        timeSlots.forEach(slot => {
+          html += `<div class="week-time-cell">${slot}</div>`;
+        });
+
+        html += '</div>';
+
+        days.forEach((day) => {
+          const dayCourses = sortByTime(allCourses.filter(course => course.day === day));
+          const dayStartMin = toMinutes('08:00');
+
+          html += '<div class="week-day-col">';
+
+          dayCourses.forEach((course) => {
+            const startMin = toMinutes(course.start);
+            const endMin = toMinutes(course.end);
+            const top = ((startMin - dayStartMin) / 60) * 80;
+            const height = Math.max(((endMin - startMin) / 60) * 80 - 8, 50);
+
+            html += `
+              <button class="week-course" type="button" data-course-id="${course.id}" style="background:${course.color}; top:${top}px; height:${height}px;">
+                <strong>${course.name}</strong>
+              </button>
+            `;
+          });
+
+          html += '</div>';
+        });
+
+        weekGrid.innerHTML = html;
+
+        weekGrid.querySelectorAll('.week-course').forEach((button) => {
+          button.addEventListener('click', () => {
+            openCourseDetail(Number(button.getAttribute('data-course-id')));
+          });
+        });
+      }
+
+      function renderDayTimeline() {
+        const timeline = document.getElementById('dayTimeline');
+        const courses = sortByTime(allCourses.filter(course => course.date === '2026-07-31'));
+
+        if (!courses.length) {
+          timeline.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">☔</div>
+              <h3>无安排</h3>
+              <p>今天尚未添加任何课程。</p>
+            </div>
+          `;
+          return;
+        }
+
+        const entries = [];
+        for (let i = 0; i < courses.length; i += 1) {
+          const course = courses[i];
+          entries.push(`
+            <div class="time-row">
+              <div class="time-label">${course.start}</div>
+              <div class="time-line">
+                <div class="course-item" style="border-left: 4px solid ${course.color}; background: var(--gray-100);">
+                  <div class="meta">
+                    <strong>${course.name}</strong>
+                    <span>${course.teacher} · ${course.room}</span>
+                  </div>
+                  <button class="btn btn-light" type="button" data-course-id="${course.id}" style="min-width: 74px;">详情</button>
+                </div>
+              </div>
+            </div>
+          `);
+        }
+
+        timeline.innerHTML = entries.join('');
+
+        timeline.querySelectorAll('[data-course-id]').forEach((button) => {
+          button.addEventListener('click', () => {
+            selectedCourseId = Number(button.getAttribute('data-course-id'));
+            renderDetail();
+            showPage('detail-page');
+          });
+        });
+      }
+
+      function renderDetail() {
+        const course = allCourses.find(item => item.id === selectedCourseId) || allCourses[0];
+        const detailCard = document.getElementById('detailCard');
+
+        detailCard.innerHTML = `
+          <div class="section">
+            <div class="course-item" style="border-left: 4px solid ${course.color};">
+              <div class="meta">
+                <strong>${course.name}</strong>
+                <span>${course.day} · ${course.start}-${course.end}</span>
+              </div>
+              <span class="tag" style="background: ${course.color}22; color: ${course.color};">${course.type}</span>
+            </div>
+          </div>
+          <div class="list">
+            <div class="list-item">
+              <div class="list-main">
+                <span class="list-icon" style="background: var(--primary-bg); color: var(--primary-color);">教</span>
+                <div class="list-copy">
+                  <strong>教师</strong>
+                  <span>${course.teacher}</span>
+                </div>
+              </div>
+            </div>
+            <div class="list-item">
+              <div class="list-main">
+                <span class="list-icon" style="background: var(--primary-bg); color: var(--primary-color);">地</span>
+                <div class="list-copy">
+                  <strong>教室</strong>
+                  <span>${course.room}</span>
+                </div>
+              </div>
+            </div>
+            <div class="list-item">
+              <div class="list-main">
+                <span class="list-icon" style="background: var(--primary-bg); color: var(--primary-color);">时</span>
+                <div class="list-copy">
+                  <strong>时间</strong>
+                  <span>${course.date} · ${course.start}-${course.end}</span>
+                </div>
+              </div>
+            </div>
+            <div class="list-item">
+              <div class="list-main">
+                <span class="list-icon" style="background: var(--secondary-bg); color: var(--secondary-color);">备</span>
+                <div class="list-copy">
+                  <strong>备注</strong>
+                  <span>${course.note}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="section" style="margin-top: var(--space-lg);">
+            <button class="btn" type="button" data-open-page="editor-page">编辑课程</button>
+          </div>
+        `;
+
+        detailCard.querySelector('[data-open-page="editor-page"]').addEventListener('click', () => showPage('editor-page'));
+      }
+
+      function renderDDL() {
+        const list = document.getElementById('ddlList');
+        list.innerHTML = ddlTasks.map(item => `
+          <div class="list-item">
+            <div class="list-main">
+              <span class="list-icon" style="background: ${item.level === 'warning' ? 'rgba(255,149,0,0.12)' : item.level === 'secondary' ? 'var(--secondary-bg)' : 'rgba(52,199,89,0.12)'}; color: ${item.level === 'warning' ? 'var(--warning)' : item.level === 'secondary' ? 'var(--secondary-color)' : 'var(--success)'};">${item.title.slice(0, 1)}</span>
+              <div class="list-copy">
+                <strong>${item.title}</strong>
+                <span>${item.time}</span>
+              </div>
+            </div>
+            <span class="tag ${item.level === 'warning' ? 'warning' : item.level === 'secondary' ? 'secondary' : 'success'}">${item.tag}</span>
+          </div>
+        `).join('');
+      }
+
+      function renderColorPicker() {
+        const choices = document.getElementById('colorPicker');
+        colorPalette.forEach((color, index) => {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'color-option' + (index === 0 ? ' active' : '');
+          dot.style.setProperty('--color', color);
+          dot.setAttribute('data-color', color);
+          dot.addEventListener('click', () => {
+            choices.querySelectorAll('.color-option').forEach(option => option.classList.remove('active'));
+            dot.classList.add('active');
+          });
+          choices.appendChild(dot);
+        });
+      }
+
+      function attachGlobalEvents() {
+        document.querySelectorAll('[data-open-page]').forEach((button) => {
+          button.addEventListener('click', () => {
+            showPage(button.getAttribute('data-open-page'));
+          });
+        });
+
+        document.querySelectorAll('.tab-item').forEach((button) => {
+          button.addEventListener('click', () => {
+            showPage(button.getAttribute('data-target'));
+          });
+        });
+
+        document.getElementById('addCourseBtn').addEventListener('click', () => {
+          showPage('editor-page');
+        });
+
+        document.getElementById('saveCourseBtn').addEventListener('click', () => {
+          const modal = document.getElementById('confirmModal');
+          modal.classList.add('show');
+          const selectedColor = document.querySelector('.color-option.active')?.getAttribute('data-color') || colorPalette[0];
+          const course = {
+            id: Date.now(),
+            name: document.getElementById('courseName').value || '新课程',
+            teacher: document.getElementById('teacherName').value || '教师',
+            room: document.getElementById('classroom').value || '教室',
+            date: document.getElementById('courseDate').value || '2026-07-31',
+            day: '周五',
+            start: document.getElementById('startTime').value || '08:30',
+            end: document.getElementById('endTime').value || '10:00',
+            color: selectedColor,
+            type: '选修',
+            note: document.getElementById('courseRemark').value || '备注'
+          };
+          allCourses.push(course);
+          renderTodayCourses();
+          renderNextCourse();
+          renderDayTimeline();
+          renderWeekGrid();
+        });
+
+        document.querySelectorAll('[data-close-modal="true"]').forEach((button) => {
+          button.addEventListener('click', () => {
+            const modal = document.getElementById('confirmModal');
+            modal.classList.remove('show');
+            const returnPage = modal.dataset.returnPage || 'home-page';
+            showPage(returnPage);
+            modal.dataset.returnPage = '';
+          });
+        });
+
+        const savedTheme = localStorage.getItem('kebiao-ui-theme');
+        if (savedTheme === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+        updateThemeToggle();
+
+        document.getElementById('themeToggle').addEventListener('change', (event) => {
+          const isDark = event.target.checked;
+          document.documentElement.classList.toggle('dark', isDark);
+          localStorage.setItem('kebiao-ui-theme', isDark ? 'dark' : 'light');
+        });
+      }
+
+      function init() {
+        renderTodayCourses();
+        renderNextCourse();
+        renderWeekGrid();
+        renderDayTimeline();
+        renderDetail();
+        renderDDL();
+        renderColorPicker();
+        attachGlobalEvents();
+        showPage('home-page');
+      }
+
+      init();
+    </script>
+  </body>
 </html>
